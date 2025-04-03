@@ -1,91 +1,74 @@
 # MCP SSE Custom Server
 
-This repository contains a custom Server-Sent Events (SSE) implementation for the Model Control Protocol (MCP). The server enables real-time, one-way communication from the server to clients using SSE technology.
+A custom server implementation using FastAPI and Server-Sent Events (SSE) with MCP (Message Control Protocol) for real-time communication.
 
 ## Overview
 
-The MCP SSE Custom Server provides a robust foundation for implementing server-sent events in your applications. It's designed to work seamlessly with the Model Control Protocol, enabling efficient streaming of updates and notifications to connected clients.
+This project demonstrates how to build a custom server that:
+- Uses FastAPI as the main web framework
+- Implements Server-Sent Events (SSE) for real-time communication
+- Integrates with MCP for message handling and tool execution
+- Includes simple echo functionality as examples
 
-## Features
+## Requirements
 
-- Real-time server-to-client communication
-- Event-driven architecture
-- Support for multiple concurrent client connections
-- Custom event type handling
-- Automatic reconnection handling
-- Cross-origin resource sharing (CORS) support
-
-## Prerequisites
-
-- Node.js (v14 or higher)
-- npm (Node Package Manager)
+- Python 3.10+
+- MCP library
+- FastAPI
+- Uvicorn
 
 ## Installation
 
-1. Clone the repository:
-```bash
-git clone https://github.com/amasetti/MCP-SSE-Custom-Server.git
-cd MCP-SSE-Custom-Server
-```
-
+1. Clone the repository
 2. Install dependencies:
+
 ```bash
-npm install
+pip install -r requirements.txt
 ```
 
 ## Usage
 
-1. Start the server:
+### Running Locally
+
+Start the server with:
+
 ```bash
-npm start
+uvicorn app.main:app --host 0.0.0.0 --port 8000
 ```
 
-2. Connect to the SSE endpoint from your client application:
-```javascript
-const eventSource = new EventSource('http://localhost:3000/events');
+The server will be accessible at `http://localhost:8000`.
 
-eventSource.onmessage = (event) => {
-    console.log('Received:', event.data);
-};
+### Docker Deployment
 
-eventSource.onerror = (error) => {
-    console.error('EventSource failed:', error);
-};
+Build and run the Docker container:
+
+```bash
+docker build -t mcp-sse-server .
+docker run -p 8000:8000 mcp-sse-server
 ```
+
+## Project Structure
+
+- `app/main.py` - Main FastAPI application with MCP functionality
+- `app/sse.py` - SSE implementation with Starlette for real-time communication
+- `Dockerfile` - Container configuration for deployment
 
 ## API Endpoints
 
-### GET /events
-- Establishes an SSE connection
-- Returns: Server-sent events stream
-- Content-Type: text/event-stream
+- `GET /` - Root endpoint returning a simple greeting
+- `GET /sse/` - SSE endpoint for establishing real-time connections
+- `POST /messages/` - Endpoint for sending messages to connected clients
 
-## Configuration
+## MCP Features
 
-The server can be configured through environment variables:
+The server implements three types of MCP functionality:
 
-- `PORT`: Server port (default: 3000)
-- `CORS_ORIGIN`: Allowed CORS origins (default: *)
+1. **Resources** - `echo://{message}` - Echo a message as a resource
+2. **Tools** - `echo_tool` - Echo a message as a tool
+3. **Prompts** - `echo_prompt` - Create an echo prompt
 
-## Error Handling
+## Example Usage
 
-The server implements robust error handling:
-- Automatic reconnection for dropped connections
-- Error event propagation to clients
-- Connection timeout handling
+You can test the SSE connection by opening a browser and navigating to the `/sse/` endpoint.
 
-## Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Support
-
-For support, please open an issue in the GitHub repository.
+To use the echo tool or resources, send appropriate requests through the MCP protocol.
