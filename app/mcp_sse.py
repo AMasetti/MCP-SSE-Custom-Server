@@ -26,6 +26,12 @@ def echo_tool(message: str) -> str:
     """Echo a message as a tool"""
     return f"Tool echo: {message}"
 
+@mcp.tool()
+def demo_tool(num1: int, num2: int) -> str:
+    """Demo a tool"""
+    sum = num1 + num2
+    return f"The sum of {num1} and {num2} is {sum}"
+
 
 @mcp.prompt()
 def echo_prompt(message: str) -> str:

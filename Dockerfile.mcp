@@ -11,8 +11,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the application code into the container
 COPY app/ app/
 
-# Expose port 8000 so the app is accessible externally
-EXPOSE 8000
-
-# Command to run the server
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Command to run the MCP server (using stdin/stdout)
+CMD ["python", "-m", "app.mcp_server"]

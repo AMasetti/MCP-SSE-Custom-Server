@@ -5,6 +5,7 @@ from starlette.routing import Mount, Route
 
 def create_sse_server(mcp: FastMCP):
     """Create a Starlette app that handles SSE connections and message handling"""
+    # Starlette is a lightweight ASGI framework/toolkit, which is ideal for building async web services in Python. It is production-ready
     transport = SseServerTransport("/messages/")
 
     # Define handler functions

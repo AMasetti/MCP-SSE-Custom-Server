@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  # GitHub MCP Service
+  github-mcp:
+    image: mcp/github
+    container_name: GithubMCP
+    environment:
+      - GITHUB_PERSONAL_ACCESS_TOKEN
+    stdin_open: true  # equivalent to -i
+    tty: true        # often needed with stdin_open
+    restart: unless-stopped
+
+  # Echo SSE Service
+  echo-sse:
+    build:
+      context: .
+      dockerfile: Dockerfile.sse
+    image: mcp/echo-sse
+    container_name: echo-sse
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+
+  # Echo Local Service
+  echo-local:
+    build:
+      context: .
+      dockerfile: Dockerfile.mcp
+    image: mcp/echo-local
+    container_name: echo-local
+    stdin_open: true  # equivalent to -i
+    tty: true        # often needed with stdin_open
+    restart: unless-stopped
+
+networks:
+  default:
+    name: mcp-network
