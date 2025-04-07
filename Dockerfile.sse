@@ -14,5 +14,8 @@ COPY app/ app/
 # Expose port 8000 so the app is accessible externally
 EXPOSE 8000
 
+# Set the server type
+ENV SERVER_TYPE=sse
+
 # Command to run the server
-CMD ["uvicorn", "app.mcp_sse:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["python", "-m", "app.mcp_server"]

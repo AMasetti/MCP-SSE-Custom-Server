@@ -11,5 +11,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the application code into the container
 COPY app/ app/
 
+# Set the server type
+ENV SERVER_TYPE=local
+
 # Command to run the MCP server (using stdin/stdout)
 CMD ["python", "-m", "app.mcp_server"]
