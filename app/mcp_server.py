@@ -4,6 +4,7 @@ from app.sse import create_sse_server
 import os
 import logging
 import sys
+from typing import List
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -27,6 +28,47 @@ def demo_tool(num1: int, num2: int) -> str:
     """Demo a tool"""
     sum = num1 + num2
     return f"The sum of {num1} and {num2} is {sum}"
+
+@mcp.tool()
+def calculate_ngrams(text: str, n: int = 2, level: str = "word") -> List[str]:
+    """
+    Calculate n-grams for the given string.
+
+    Args:
+        text: The input text to generate n-grams from
+        n: Size of the n-gram (default: 2)
+        level: Type of n-grams to generate: "word" or "character" (default: "word")
+
+    Returns:
+        A list of n-gram strings
+    """
+    if n < 1:
+        return ["Error: n must be a positive integer"]
+
+    if level.lower() not in ["word", "character"]:
+        return ["Error: level must be either 'word' or 'character'"]
+
+    if level.lower() == "word":
+        # Split the text into words
+        tokens = text.split()
+    else:  # character level
+        # Use each character as a token
+        tokens = list(text)
+
+    # Handle edge case: if text is shorter than n tokens
+    if len(tokens) < n:
+        return [' '.join(tokens) if level.lower() == "word" else ''.join(tokens)]
+
+    # Generate n-grams
+    ngrams = []
+    for i in range(len(tokens) - n + 1):
+        if level.lower() == "word":
+            ngram = ' '.join(tokens[i:i+n])
+        else:  # character level
+            ngram = ''.join(tokens[i:i+n])
+        ngrams.append(ngram)
+
+    return ngrams
 
 @mcp.prompt()
 def echo_prompt(message: str) -> str:
